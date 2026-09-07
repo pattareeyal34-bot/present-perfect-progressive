@@ -1,0 +1,8 @@
+{
+  "name": "present-perfect-progressive-worksheet",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}
