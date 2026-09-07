@@ -34,9 +34,9 @@
 <script>
 const $=id=>document.getElementById(id);
 function values(){return {name:$('name').value.trim(),no:$('no').value.trim(),cls:$('cls').value.trim()}}
-function url(preview=false){const v=values();const p=new URLSearchParams({name:v.name,no:v.no,class:v.cls});if(preview)p.set('preview','1');return '/.netlify/functions/create-worksheet?'+p.toString()}
+function url(preview=false){const v=values();const p=new URLSearchParams({name:v.name,no:v.no,class:v.cls});if(preview)p.set('preview','1');return '/api/create-worksheet?'+p.toString()}
 function valid(){const v=values();if(!v.name||!v.no||!v.cls){$('status').textContent='Please enter Full Name, No., and Class.';return false}$('status').textContent='';return true}
-$('previewBtn').onclick=()=>{if(!valid())return;$('previewImg').src=url(true)+'&t='+Date.now();$('previewBox').style.display='block';$('previewBox').scrollIntoView({behavior:'smooth',block:'start'})};
+$('previewBtn').onclick=()=>{if(!valid())return;const img=$('previewImg');$('status').textContent='Creating preview...';img.onload=()=>{$('status').textContent='';};img.onerror=()=>{$('status').textContent='Preview could not be created. Please try again.';};img.src=url(true)+'&t='+Date.now();$('previewBox').style.display='block';$('previewBox').scrollIntoView({behavior:'smooth',block:'start'})};
 $('downloadBtn').onclick=()=>{if(!valid())return;window.location.href=url(false)};
 $('openBtn').onclick=()=>{if(!valid())return;window.open(url(true)+'&t='+Date.now(),'_blank')};
 </script>
