@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Present Perfect Progressive Worksheet</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fff7fb;color:#1f2937}
+  .wrap{max-width:760px;margin:auto;padding:22px 16px 40px}.card{background:white;border-radius:22px;padding:20px;box-shadow:0 8px 28px rgba(30,41,59,.10);border:1px solid #f3d7e6}
+  h1{font-size:clamp(24px,6vw,36px);margin:0 0 6px;color:#5b2a9d} .sub{margin:0 0 20px;color:#64748b}
+  label{font-weight:700;display:block;margin:14px 0 6px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  input{width:100%;font-size:18px;padding:13px 14px;border:2px solid #e5e7eb;border-radius:13px;outline:none} input:focus{border-color:#a78bfa}
+  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.btn{border:0;border-radius:14px;padding:14px 12px;font-size:17px;font-weight:800;cursor:pointer;text-decoration:none;text-align:center}
+  .preview{background:#ede9fe;color:#5b21b6}.download{background:#5b2a9d;color:white}.open{display:block;margin-top:10px;background:#fce7f3;color:#9d174d}
+  .note{font-size:13px;color:#64748b;margin:12px 0 0;line-height:1.45}.status{min-height:24px;margin-top:10px;font-weight:700;color:#be185d}
+  #previewBox{display:none;margin-top:18px}#previewImg{width:100%;height:auto;border-radius:14px;border:1px solid #e5e7eb}
+  @media(max-width:520px){.row,.buttons{grid-template-columns:1fr}.card{padding:16px}}
+</style>
+</head>
+<body><div class="wrap"><div class="card">
+  <h1>Present Perfect Progressive</h1>
+  <p class="sub">Personalized Worksheet • PNG Download</p>
+  <label for="name">Full Name</label><input id="name" autocomplete="name" placeholder="e.g. PATTAREEYA LABPOO" />
+  <div class="row">
+    <div><label for="no">No.</label><input id="no" inputmode="numeric" placeholder="e.g. 1" /></div>
+    <div><label for="cls">Class M.5/</label><input id="cls" inputmode="numeric" placeholder="e.g. 1" /></div>
+  </div>
+  <div class="buttons"><button class="btn preview" id="previewBtn">Preview Worksheet</button><button class="btn download" id="downloadBtn">Download PNG</button></div>
+  <button class="btn open" id="openBtn" style="width:100%">Open PNG (mobile/tablet backup)</button>
+  <p class="note">If your phone blocks the download, tap <b>Open PNG</b>, then press and hold the image and choose Save/Download Image.</p>
+  <div class="status" id="status"></div>
+  <div id="previewBox"><img id="previewImg" alt="Worksheet preview" /></div>
+</div></div>
+<script>
+const $=id=>document.getElementById(id);
+function values(){return {name:$('name').value.trim(),no:$('no').value.trim(),cls:$('cls').value.trim()}}
+function url(preview=false){const v=values();const p=new URLSearchParams({name:v.name,no:v.no,class:v.cls});if(preview)p.set('preview','1');return '/api/create-worksheet?'+p.toString()}
+function valid(){const v=values();if(!v.name||!v.no||!v.cls){$('status').textContent='Please enter Full Name, No., and Class.';return false}$('status').textContent='';return true}
+$('previewBtn').onclick=()=>{if(!valid())return;$('previewImg').src=url(true)+'&t='+Date.now();$('previewBox').style.display='block';$('previewBox').scrollIntoView({behavior:'smooth',block:'start'})};
+$('downloadBtn').onclick=()=>{if(!valid())return;window.location.href=url(false)};
+$('openBtn').onclick=()=>{if(!valid())return;window.open(url(true)+'&t='+Date.now(),'_blank')};
+</script>
+</body></html>
