@@ -93,6 +93,7 @@ function bitmapTextSvg(text, x, y, opts = {}) {
 module.exports = async (req, res) => {
   try {
     const q = req.query || {};
+    const worksheet = String(q.worksheet || '1') === '2' ? '2' : '1';
     const name = String(q.name || '').trim();
     const no = String(q.no || '').trim();
     const rawClass = String(q.class || '').trim();
@@ -103,42 +104,48 @@ module.exports = async (req, res) => {
       return res.send('Missing name, number, or class.');
     }
 
-    // The worksheet already prints “Class M.5/”, so only the room number is written on the line.
     const room = rawClass.replace(/\s+/g,'').replace(/^M\.?5\//i,'').replace(/^5\//,'') || rawClass;
     const classLabel = `M.5/${room}`;
 
-    const imagePath = path.join(process.cwd(), 'worksheet.png');
+    const cfg = worksheet === '2' ? {
+      file: 'worksheet2.png',
+      title: 'Present_Perfect_Simple_Exit_Worksheet',
+      header: { name:[132,25,420], no:[635,25,95], room:[904,25,95] },
+      positions: [[300,420],[885,430],[295,835],[880,845],[325,1210],[875,1450]],
+      markWidth: 520
+    } : {
+      file: 'worksheet1.png',
+      title: 'Present_Perfect_Progressive',
+      header: { name:[122,31,375], no:[620,31,105], room:[918,31,120] },
+      positions: [[310,430],[840,500],[260,870],[815,930],[320,1260],[835,1425]],
+      markWidth: 500
+    };
+
+    const imagePath = path.join(__dirname, 'assets', cfg.file);
     const input = fs.readFileSync(imagePath);
     const meta = await sharp(input).metadata();
-    const W = meta.width || 1140;
-    const H = meta.height || 1611;
+    const W = meta.width;
+    const H = meta.height;
 
-    // Tuned to the supplied Present Perfect Progressive worksheet (1140 × 1611).
+    const [nx,ny,nw] = cfg.header.name;
+    const [ox,oy,ow] = cfg.header.no;
+    const [cx,cy,cw] = cfg.header.room;
     const header = [
-      bitmapTextSvg(name, 122, 31, { scale: 3, gap: 2, fill: '#111827', maxWidth: 375 }),
-      bitmapTextSvg(no,   620, 31, { scale: 3, gap: 2, fill: '#111827', maxWidth: 105 }),
-      bitmapTextSvg(room, 918, 31, { scale: 3, gap: 2, fill: '#111827', maxWidth: 120 })
+      bitmapTextSvg(name, nx, ny, { scale:3, gap:2, fill:'#111827', maxWidth:nw }),
+      bitmapTextSvg(no,   ox, oy, { scale:3, gap:2, fill:'#111827', maxWidth:ow }),
+      bitmapTextSvg(room, cx, cy, { scale:3, gap:2, fill:'#111827', maxWidth:cw })
     ].join('');
 
     const mark = `${name}  ${classLabel}  NO.${no}`;
-    const positions = [
-      [310, 430], [840, 500],
-      [260, 870], [815, 930],
-      [320, 1260], [835, 1425]
-    ];
-    const marks = positions.map(([x,y]) => bitmapTextSvg(mark, x, y, {
-      scale: 3, gap: 2, fill: '#7c3aed', opacity: 0.20,
-      rotate: -18, anchor: 'middle', maxWidth: 500
+    const marks = cfg.positions.map(([x,y]) => bitmapTextSvg(mark, x, y, {
+      scale:3, gap:2, fill:'#7c3aed', opacity:0.20,
+      rotate:-18, anchor:'middle', maxWidth:cfg.markWidth
     })).join('');
 
     const overlay = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${header}${marks}</svg>`;
+    const png = await sharp(input).composite([{input:Buffer.from(overlay),top:0,left:0}]).png().toBuffer();
 
-    const png = await sharp(input)
-      .composite([{ input: Buffer.from(overlay), top: 0, left: 0 }])
-      .png()
-      .toBuffer();
-
-    const filename = `Present_Perfect_Progressive_${safeFilePart(name)}_${safeFilePart(classLabel)}_No${safeFilePart(no)}.png`;
+    const filename = `${cfg.title}_${safeFilePart(name)}_${safeFilePart(classLabel)}_No${safeFilePart(no)}.png`;
     res.status(200);
     res.setHeader('Content-Type', isPreview ? 'image/png' : 'application/octet-stream');
     res.setHeader('Content-Disposition', `${isPreview ? 'inline' : 'attachment'}; filename="${filename}"`);

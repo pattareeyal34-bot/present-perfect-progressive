@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/create-worksheet.js": {
-      "includeFiles": "worksheet.png"
+      "includeFiles": "api/assets/**"
     }
   }
 }
