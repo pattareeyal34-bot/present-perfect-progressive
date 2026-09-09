@@ -93,7 +93,8 @@ function bitmapTextSvg(text, x, y, opts = {}) {
 module.exports = async (req, res) => {
   try {
     const q = req.query || {};
-    const worksheet = String(q.worksheet || '1') === '2' ? '2' : '1';
+    const requested = String(q.worksheet || '1');
+    const worksheet = ['1','2','3'].includes(requested) ? requested : '1';
     const name = String(q.name || '').trim();
     const no = String(q.no || '').trim();
     const rawClass = String(q.class || '').trim();
@@ -107,7 +108,13 @@ module.exports = async (req, res) => {
     const room = rawClass.replace(/\s+/g,'').replace(/^M\.?5\//i,'').replace(/^5\//,'') || rawClass;
     const classLabel = `M.5/${room}`;
 
-    const cfg = worksheet === '2' ? {
+    const cfg = worksheet === '3' ? {
+      file: 'worksheet3.png',
+      title: 'Present_Perfect_Simple_vs_Progressive',
+      header: { name:[130,160,390], no:[650,160,90], room:[950,160,100] },
+      positions: [[300,390],[900,470],[300,760],[900,900],[300,1210],[900,1450]],
+      markWidth: 500
+    } : worksheet === '2' ? {
       file: 'worksheet2.png',
       title: 'Present_Perfect_Simple_Exit_Worksheet',
       header: { name:[132,25,420], no:[635,25,95], room:[904,25,95] },
