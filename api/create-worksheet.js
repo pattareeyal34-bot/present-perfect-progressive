@@ -111,9 +111,9 @@ module.exports = async (req, res) => {
     const cfg = worksheet === '3' ? {
       file: 'worksheet3.png',
       title: 'Present_Perfect_Simple_vs_Progressive',
-      header: { name:[130,160,390], no:[650,160,90], room:[950,160,100] },
-      positions: [[300,390],[900,470],[300,760],[900,900],[300,1210],[900,1450]],
-      markWidth: 500
+      header: { name:[198,158,365], no:[630,158,70], room:[807,158,90] },
+      positions: [[270,350],[760,430],[260,625],[760,815],[275,1030],[750,1320]],
+      markWidth: 420
     } : worksheet === '2' ? {
       file: 'worksheet2.png',
       title: 'Present_Perfect_Simple_Exit_Worksheet',
