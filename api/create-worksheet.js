@@ -94,7 +94,7 @@ module.exports = async (req, res) => {
   try {
     const q = req.query || {};
     const requested = String(q.worksheet || '1');
-    const worksheet = ['1','2','3'].includes(requested) ? requested : '1';
+    const worksheet = ['1','2','3','4'].includes(requested) ? requested : '1';
     const name = String(q.name || '').trim();
     const no = String(q.no || '').trim();
     const rawClass = String(q.class || '').trim();
@@ -108,7 +108,14 @@ module.exports = async (req, res) => {
     const room = rawClass.replace(/\s+/g,'').replace(/^M\.?5\//i,'').replace(/^5\//,'') || rawClass;
     const classLabel = `M.5/${room}`;
 
-    const cfg = worksheet === '3' ? {
+    const cfg = worksheet === '4' ? {
+      file: 'worksheet4.png',
+      title: 'Present_Perfect_Simple_or_Progressive_Practice',
+      // Worksheet 4 has its student-information line at the bottom.
+      header: { name:[160,1462,375], no:[804,1462,80], room:[625,1462,90] },
+      positions: [[300,430],[760,470],[300,720],[760,760],[300,1040],[760,1100]],
+      markWidth: 420
+    } : worksheet === '3' ? {
       file: 'worksheet3.png',
       title: 'Present_Perfect_Simple_vs_Progressive',
       header: { name:[198,158,365], no:[630,158,70], room:[807,158,90] },

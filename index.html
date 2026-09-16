@@ -16,6 +16,7 @@
   <div class="choice"><input type="radio" name="ws" id="ws1" value="1" checked><label for="ws1">Lesson 1<small>Present Perfect Progressive</small></label></div>
   <div class="choice"><input type="radio" name="ws" id="ws2" value="2"><label for="ws2">Lesson 2<small>Present Perfect Simple — Exit Worksheet</small></label></div>
 <div class="choice"><input type="radio" name="ws" id="ws3" value="3"><label for="ws3">Lesson 3<small>Present Perfect Simple vs. Progressive</small></label></div>
+  <div class="choice"><input type="radio" name="ws" id="ws4" value="4"><label for="ws4">Lesson 4<small>Present Perfect Simple or Progressive — Practice</small></label></div>
 </div>
 <label class="field" for="name">Full Name</label><input class="text" id="name" autocomplete="name" placeholder="e.g. PATTAREEYA LABPOO" />
 <div class="row">
@@ -36,7 +37,7 @@ function url(preview=false){const v=values();const p=new URLSearchParams({worksh
 function valid(){const v=values();if(!v.name||!v.no||!v.cls){$('status').textContent='Please enter Full Name, No., and Class.';return false}$('status').textContent='';return true}
 function resetPreview(){ $('previewBox').style.display='none'; $('previewImg').removeAttribute('src'); $('status').textContent=''; }
 document.querySelectorAll('input[name="ws"]').forEach(el=>el.addEventListener('change',resetPreview));
-$('previewBtn').onclick=()=>{if(!valid())return;const img=$('previewImg');$('status').textContent='Creating preview...';$('previewTitle').textContent=worksheet()==='1'?'Lesson 1 — Present Perfect Progressive':worksheet()==='2'?'Lesson 2 — Present Perfect Simple':'Lesson 3 — Present Perfect Simple vs. Progressive';img.onload=()=>{$('status').textContent='';};img.onerror=()=>{$('status').textContent='Preview could not be created. Please try again.';};img.src=url(true)+'&t='+Date.now();$('previewBox').style.display='block';$('previewBox').scrollIntoView({behavior:'smooth',block:'start'})};
+$('previewBtn').onclick=()=>{if(!valid())return;const img=$('previewImg');$('status').textContent='Creating preview...';$('previewTitle').textContent=worksheet()==='1'?'Lesson 1 — Present Perfect Progressive':worksheet()==='2'?'Lesson 2 — Present Perfect Simple':worksheet()==='3'?'Lesson 3 — Present Perfect Simple vs. Progressive':'Lesson 4 — Present Perfect Simple or Progressive';img.onload=()=>{$('status').textContent='';};img.onerror=()=>{$('status').textContent='Preview could not be created. Please try again.';};img.src=url(true)+'&t='+Date.now();$('previewBox').style.display='block';$('previewBox').scrollIntoView({behavior:'smooth',block:'start'})};
 $('downloadBtn').onclick=()=>{if(!valid())return;window.location.href=url(false)};
 $('openBtn').onclick=()=>{if(!valid())return;window.open(url(true)+'&t='+Date.now(),'_blank')};
 </script>
