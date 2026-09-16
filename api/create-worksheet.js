@@ -112,7 +112,7 @@ module.exports = async (req, res) => {
       file: 'worksheet4.png',
       title: 'Present_Perfect_Simple_or_Progressive_Practice',
       // Worksheet 4 has its student-information line at the bottom.
-      header: { name:[160,1462,375], no:[804,1462,80], room:[625,1462,90] },
+      header: { name:[160,1462,375], no:[804,1462,80], room:[625,1462,155] },
       positions: [[300,430],[760,470],[300,720],[760,760],[300,1040],[760,1100]],
       markWidth: 420
     } : worksheet === '3' ? {
@@ -147,7 +147,7 @@ module.exports = async (req, res) => {
     const header = [
       bitmapTextSvg(name, nx, ny, { scale:3, gap:2, fill:'#111827', maxWidth:nw }),
       bitmapTextSvg(no,   ox, oy, { scale:3, gap:2, fill:'#111827', maxWidth:ow }),
-      bitmapTextSvg(room, cx, cy, { scale:3, gap:2, fill:'#111827', maxWidth:cw })
+      bitmapTextSvg(worksheet === '4' ? classLabel : room, cx, cy, { scale:3, gap:2, fill:'#111827', maxWidth:cw })
     ].join('');
 
     const mark = `${name}  ${classLabel}  NO.${no}`;
